@@ -1,0 +1,12 @@
+Constructing 7 models using pseudo training summary statistics
+Model	Type	Heritability	lambda	s	p	f2	p1	p2	p3	p4		Num_Predictors_Failed
+1	ridge	0.1000	NA	NA	NA	NA	NA	NA	NA	NA	0
+3	ridge	0.3000	NA	NA	NA	NA	NA	NA	NA	NA	0
+2	ridge	0.2000	NA	NA	NA	NA	NA	NA	NA	NA	0
+4	ridge	0.4000	NA	NA	NA	NA	NA	NA	NA	NA	0
+5	ridge	0.5000	NA	NA	NA	NA	NA	NA	NA	NA	0
+6	ridge	0.6000	NA	NA	NA	NA	NA	NA	NA	NA	0
+7	ridge	0.7000	NA	NA	NA	NA	NA	NA	NA	NA	0
+Constructing 1 models using summary statistics in ../basic_gwas/basic_gwas_result.txt.summaries
+Model	Type	Heritability	lambda	s	p	f2	p1	p2	p3	p4	Num_Predictors_Failed
+7	ridge	0.7000	NA	NA	NA	NA	NA	NA	NA	NA	0
