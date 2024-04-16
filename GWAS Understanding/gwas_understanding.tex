@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{titling}
+\usepackage{a4wide}
+\usepackage{lipsum}
+\usepackage{tikzpagenodes}
+\usepackage{hyperref}
+\usepackage{fancyhdr} % Added package
+
+\begin{document}
+\title{Patrick GWAS notes}
+%\author{\vspace{-10mm}0451 972 879 | patrick.m.gibbs@protonmail.com}
+\setlength{\droptitle}{-12em}
+\date{}
+\maketitle
+\vspace*{-20mm}
+\setlength{\parindent}{0pt}
+\noindent\textbf{Linear Fixed Effects Model}
+\vspace{2mm}
+
+Test each marker independently with the following model:
+
+
+\begin{equation*}
+y = \beta_0 + \beta x
+\end{equation*}
+
+Find the probability $p$ that $\beta \neq 0$ 
+\newline
+
+To do this we fit each model using
+
+
+\[
+\begin{bmatrix}
+\beta_0\\
+\beta\end{bmatrix}
+=(X^T X)^{-1} X^T y\]
+
+For each $\beta$ we find the t-statisitc computed as:
+
+\begin{equation*}
+t = \frac{\beta}{se_b} 
+\end{equation*}
+
+where $\beta$ is as computed above, and $se_\beta$ is the standard error of beta computed as:
+
+\begin{equation*}
+se_\beta = \frac{\sqrt{\frac{\sum_i (y_i - \hat{y}_i)^2} {n-2}}}{\sum_j (x_j-\bar{x})}
+\end{equation*}
+
+The $p$ can then be computed as:
+
+\begin{equation*}
+p=2\cdot(1-F(t))
+\end{equation*}
+
+where $F$ is the t-distribution CDF with $n-2$ degrees of freedom. $p$ values and then $-\log$ transformed to produce a manhattan plot.
+\newline
+
+\noindent\textbf{Mixed Effects Model}
+
+
+
+\end{document}
