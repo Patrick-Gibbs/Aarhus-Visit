@@ -66,7 +66,6 @@ ldak --mega-prs prs_ridge_height --model ridge --summary ../basic_gwas/basic_gwa
 ldak --mega-prs prs_bolt_height --model bolt --summary ../basic_gwas/basic_gwas_result.txt.summaries --cors cors --power 0.25 --high-LD highld.txt --allow-ambiguous YES --max-threads 8
 
 
-
 # use test set to get held out r2 values
 ldak --calc-scores scores_ridge_height --scorefile prs_ridge_height.effects --bfile /faststorage/project/dsmwpred/data/ukbb/geno --power 0
 ldak --calc-scores scores_bolt_height --scorefile prs_bolt_height.effects --bfile /faststorage/project/dsmwpred/data/ukbb/geno --power 0
