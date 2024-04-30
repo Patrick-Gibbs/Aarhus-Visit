@@ -1,0 +1,33 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:12:00
+
+#### Setting up files ####
+mkdir small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1
+mkdir genome_regions_map
+for path in small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_regions_map small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/casual_snp_info; do
+    mkdir $path
+done
+
+
+#### SIMULATE TRAIT ####
+ubb_binary_path=/faststorage/project/dsmwpred/data/ukbb/geno
+python3 -c "import python_scripts.utils as utils; utils.random_indivdual_subset(50000,42,'/faststorage/project/dsmwpred/data/ukbb/geno.fam', 'rand50000.fam')"
+
+# sample size is the size of each genomic region
+python3 -c "import python_scripts.utils as utils; utils.sample_genome_domains(sample_size=2000000, sample_number=1, genome_path=, output_path=small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_regions_map/genome_sample)"
+
+for ((i=0; i<1; i++)); do
+# make the bed using the choosen genome sample regions
+/home/patrickgibbs/dsmwpred/patrick/plink/plink --bfile  --extract small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_regions_map/genome_sample_${i} --range --make-bed --out small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample_${i} --keep rand50000.fam 
+
+# simulate traits
+#python3 python_scripts/simulate_traits_chunks.py --b small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample -i $i -he 0.02 --phenotype-path small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual --snp-info-out small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/casual_snp_info --num-casual 1
+python3 -c "import python_scripts.utils as utils; utils.simulate_traits_for_genome_chunks(bfile=small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample, phenotypes_output_path=small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual, snps_info=small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/casual_snp_info, heritability=0.02, num_casual=1, sample=$i)"
+
+
+#### LDAK GWAS####
+~/snpher/faststorage/ldak5.2.linux --linear small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas/gwas_sample_${i} --bfile small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample_${i} --pheno small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual/pheno_${i} --max-threads 4
+
+done

@@ -1,0 +1,4 @@
+	Chromosome code	Variant identifier	Position in morgans or centimorgans	Base-pair coordinate 	Allele 1	Allele 2	heritability	snp_index_in_chunk	effect_sizes
+87	1	1:188254744_G_A	208.253	188254744	G	A	0.1	87	1.3242655134676942
+203	1	1:188760941_T_C	208.657	188760941	T	C	0.1	203	0.21979481321811914
+121	1	1:188415067_A_G	208.293	188415067	A	G	0.1	121	-1.4392241921905409

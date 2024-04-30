@@ -1,0 +1,78 @@
+mkdir: cannot create directory ‘small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1’: File exists
+mkdir: cannot create directory ‘genome_regions_map’: File exists
+mkdir: cannot create directory ‘small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_regions_map’: File exists
+mkdir: cannot create directory ‘small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample’: File exists
+mkdir: cannot create directory ‘small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual’: File exists
+mkdir: cannot create directory ‘small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas’: File exists
+mkdir: cannot create directory ‘small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/casual_snp_info’: File exists
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/faststorage/project/dsmwpred/patrick/Patrick_Aarhus/Aarhus-Visit/fine_mapping_simulation/python_scripts/utils.py", line 1, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+  File "<string>", line 1
+    import python_scripts.utils as utils; utils.sample_genome_domains(sample_size=2000000, sample_number=1, genome_path=, output_path=small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_regions_map/genome_sample)
+                                                                                                                        ^
+SyntaxError: invalid syntax
+PLINK v1.90b7.2 64-bit (11 Dec 2023)           www.cog-genomics.org/plink/1.9/
+(C) 2005-2023 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample_0.log.
+Options in effect:
+  --bfile
+  --extract small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_regions_map/genome_sample_0
+  --keep rand50000.fam
+  --make-bed
+  --out small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample_0
+  --range
+
+Note: --range flag deprecated.  Use e.g. "--extract range <filename>".
+1547716 MB RAM detected; reserving 773858 MB for main workspace.
+Error: Failed to open plink.bed.
+  File "<string>", line 1
+    import python_scripts.utils as utils; utils.simulate_traits_for_genome_chunks(bfile=small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample, phenotypes_output_path=small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual, snps_info=small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/casual_snp_info, heritability=0.02, num_casual=1, sample=0)
+                                                                                                                             ^
+SyntaxError: invalid token
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+LDAK - Software for obtaining Linkage Disequilibrium Adjusted Kinships and Loads More
+Version 5.2 - Help pages at http://www.ldak.org
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+There are 4 pairs of arguments:
+--linear small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas/gwas_sample_0
+--bfile small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample_0
+--pheno small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual/pheno_0
+--max-threads 4
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+Performing linear regression
+
+To additionally compute test statistics via a saddlepoint approximation, add "--spa-test YES"
+
+To perform weighted linear regression, use "--sample-weights"
+
+Will use the standard estimator of effect size variance; to switch to the sandwich estimator use "--sandwich YES"
+
+Consider using "--covar" to provide covariates
+
+Consider using "--top-preds" to include (strongly-associated) predictors as extra covariates
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+Reading IDs for 50000 samples from small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample_0.fam
+
+Checking responses for 50000 samples from small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual/pheno_0
+
+Reading details for 638 predictors from small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/genome_sample/genome_sample_0.bim
+
+Data contain 50000 samples and 638 predictors
+
+Reading responses for 50000 samples from small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/phenotypes_casual/pheno_0
+
+Performing linear regression for Chunk 1 of 1
+
+Main results saved in small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas/gwas_sample_0.assoc, with a summary version in small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas/gwas_sample_0.summaries, p-values in small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas/gwas_sample_0.pvalues and score file in small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas/gwas_sample_0.score
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+Mission completed. All your basepair are belong to us :)
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --

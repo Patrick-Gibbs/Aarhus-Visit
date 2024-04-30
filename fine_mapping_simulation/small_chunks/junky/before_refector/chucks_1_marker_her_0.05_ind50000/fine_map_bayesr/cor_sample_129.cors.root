@@ -1,0 +1,8 @@
+Datafile chucks_1_marker_her_0.05_ind50000/genome_regions/genome_sample_129.bed
+Num_Samples 50000
+Num_Predictors 713
+Num_Samples_Used 637
+Num_Predictors_Used 713
+Num_Pairs 30088
+Threshold 1.0362e-02
+Window_kb 3000.0000

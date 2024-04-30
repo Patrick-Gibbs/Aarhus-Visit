@@ -1,0 +1,8 @@
+Datafile small_chunks/chucks_1_marker_her_0.1_ind50000/genome_regions/genome_sample_64.bed
+Num_Samples 50000
+Num_Predictors 868
+Num_Samples_Used 637
+Num_Predictors_Used 868
+Num_Pairs 41478
+Threshold 1.0362e-02
+Window_kb 3000.0000

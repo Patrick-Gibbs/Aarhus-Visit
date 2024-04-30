@@ -1,0 +1,8 @@
+Datafile /faststorage/project/dsmwpred/data/ukbb/geno.bed
+Num_Samples 392214
+Num_Predictors 628694
+Num_Samples_Used 5000
+Num_Predictors_Used 628694
+Num_Pairs 148064918
+Threshold 1.3261e-03
+Window_kb 3000.0000

@@ -1,0 +1,14 @@
+Number of times leading p_val is casual 156
+Number of times leading post. is casual 143
+100% true possitive discovery rate: (None, 1.0)
+99.0% true possitive discovery rate: (None, 1.0)
+95.0% true possitive discovery rate: (None, 1.0)
+90.0% true possitive discovery rate: (None, 1.0)
+80.0% true possitive discovery rate: (0.61, 0.6676079717550942)
+70.0% true possitive discovery rate: (0.65, 0.34974856075566685)
+treating post > 1 as casual: TP 45 FP 5
+treating post > 0.99 as casual: TP 92 FP 15
+treating post > 0.95 as casual: TP 104 FP 18
+treating post > 0.9 as casual: TP 107 FP 19
+treating post > 0.8 as casual: TP 115 FP 25
+treating post > 0.7 as casual: TP 122 FP 28

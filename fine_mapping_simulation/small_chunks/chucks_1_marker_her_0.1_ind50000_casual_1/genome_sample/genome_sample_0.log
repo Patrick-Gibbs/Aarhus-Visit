@@ -1,0 +1,19 @@
+PLINK v1.90b7.2 64-bit (11 Dec 2023)
+Options in effect:
+  --bfile
+  --extract small_chunks/chucks_1_marker_her_0.1_ind50000_casual_1/genome_regions_map/genome_sample_0
+  --keep rand50000.fam
+  --make-bed
+  --out small_chunks/chucks_1_marker_her_0.1_ind50000_casual_1/genome_sample/genome_sample_0
+  --range
+
+Hostname: s21n32
+Working directory: /faststorage/project/dsmwpred/patrick/Patrick_Aarhus/Aarhus-Visit/fine_mapping_simulation
+Start time: Tue Apr 30 16:32:17 2024
+
+Note: --range flag deprecated.  Use e.g. "--extract range <filename>".
+Random number seed: 1714487537
+515426 MB RAM detected; reserving 257713 MB for main workspace.
+Error: Failed to open plink.bed.
+
+End time: Tue Apr 30 16:32:17 2024

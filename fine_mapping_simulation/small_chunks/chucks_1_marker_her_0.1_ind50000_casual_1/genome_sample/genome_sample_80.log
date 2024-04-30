@@ -1,0 +1,36 @@
+PLINK v1.90b7.2 64-bit (11 Dec 2023)
+Options in effect:
+  --bfile /faststorage/project/dsmwpred/data/ukbb/geno
+  --extract small_chunks/chucks_1_marker_her_0.1_ind50000_casual_1/genome_regions_map/genome_sample_80
+  --keep rand50000.fam
+  --make-bed
+  --out small_chunks/chucks_1_marker_her_0.1_ind50000_casual_1/genome_sample/genome_sample_80
+  --range
+
+Hostname: s21n51
+Working directory: /faststorage/project/dsmwpred/patrick/Patrick_Aarhus/Aarhus-Visit/fine_mapping_simulation
+Start time: Tue Apr 30 14:52:15 2024
+
+Note: --range flag deprecated.  Use e.g. "--extract range <filename>".
+Random number seed: 1714481535
+515426 MB RAM detected; reserving 257713 MB for main workspace.
+628694 variants loaded from .bim file.
+392214 people (180120 males, 212094 females) loaded from .fam.
+--extract range: 628230 variants excluded.
+--extract range: 464 variants remaining.
+--keep: 50000 people remaining.
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 50000 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Total genotyping rate in remaining samples is 0.998922.
+464 variants and 50000 people pass filters and QC.
+Note: No phenotypes present.
+--make-bed to
+small_chunks/chucks_1_marker_her_0.1_ind50000_casual_1/genome_sample/genome_sample_80.bed
++
+small_chunks/chucks_1_marker_her_0.1_ind50000_casual_1/genome_sample/genome_sample_80.bim
++
+small_chunks/chucks_1_marker_her_0.1_ind50000_casual_1/genome_sample/genome_sample_80.fam
+... done.
+
+End time: Tue Apr 30 14:52:16 2024
