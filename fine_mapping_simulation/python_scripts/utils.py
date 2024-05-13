@@ -133,7 +133,7 @@ def is_overlap(p_bounds, c_bound):
     return False
 
 
-def sample_snp(previous_bounds, ukbb_bim, approx_chromosome_size, size=10**6):
+def sample_snp(previous_bounds, ukbb_bim, approx_chromosome_size, size=10**6, max_snps=1500):
     """
     Selects a random genome location of `size`. Also ensures that selected region has not before been selected
     and is thus not in previous_bounds.
@@ -150,11 +150,14 @@ def sample_snp(previous_bounds, ukbb_bim, approx_chromosome_size, size=10**6):
     """
 
     # selected a random snp from the bim
-    snp = ukbb_bim.iloc[randint(0, len(ukbb_bim))]
+    snp_index = randint(0, len(ukbb_bim))
+    snp = ukbb_bim.iloc[snp_index]
 
     # extract snp infomation
     snp_chromosome = snp['chrom_number']
     snp_pos = snp['chrom_pos']
+
+    
 
     # extract += 1mb from the randomly seleted SNP
     start = int(snp_pos - size/2)
@@ -168,10 +171,19 @@ def sample_snp(previous_bounds, ukbb_bim, approx_chromosome_size, size=10**6):
             or is_overlap(previous_bounds, (snp_chromosome, start, end))):
         return sample_snp(previous_bounds, ukbb_bim, approx_chromosome_size, size=size)
 
+
+    # ensure that the region has at most `max_snps` snps
+    upper =  ukbb_bim.iloc[snp_index + max_snps//2]
+    lower =  ukbb_bim.iloc[snp_index - max_snps//2]
+    if upper['chrom_number'] != snp_chromosome or upper['chrom_pos'] < end:
+        return sample_snp(previous_bounds, ukbb_bim, approx_chromosome_size, size=size)
+    if lower['chrom_number'] != snp_chromosome or lower['chrom_pos'] > start:
+        return sample_snp(previous_bounds, ukbb_bim, approx_chromosome_size, size=size)
+
     return snp_chromosome, start, end
 
 
-def sample_genome_domains(sample_size, sample_number, genome_path, output_path):
+def sample_genome_domains(sample_size, sample_number, genome_path, output_path, max_snps=1500):
     """
     Samples a random regions of the genome, and write a file speciefyinh the SNPs
     that are in that genomic region. The sample regions are such that they do not
@@ -295,7 +307,7 @@ def simulate_traits_for_genome_chunks(bfile, phenotypes_output_path, snps_info,
     phenotype_df = pd.DataFrame(
         {'acc1': fam_df[0], 'acc2': fam_df[1], 'pheno': y})
     phenotype_df.to_csv(
-        f'{phenotypes_output_path}/pheno_{sample}', sep=' ', header=None, index=None)
+        f'{phenotypes_output_path}/sample_{sample}', sep=' ', header=None, index=None)
 
     if num_casual == 0:
         return
@@ -499,6 +511,8 @@ def get_power_fdr_series(all_post_vals, all_casual, strict_inc=True):
     arg_sort = np.argsort(all_post_vals)[::-1]
     tolerance = 1e-6 # Set your tolerance value
     disjoint_indices = np.where(~np.isclose(np.diff(all_post_vals[arg_sort]), 0, atol=tolerance))[0]
+    if len(disjoint_indices) == 0:
+        disjoint_indices = np.array([0])
 
     probs = []
     power = []
@@ -506,6 +520,7 @@ def get_power_fdr_series(all_post_vals, all_casual, strict_inc=True):
     tp = 0
     fp = 0
     last_iter = 0
+
     for disjoint_index in disjoint_indices:
         tp_i = len(np.intersect1d(arg_sort[last_iter:disjoint_index+1], all_casual))
 
@@ -528,8 +543,11 @@ def get_power_fdr_series(all_post_vals, all_casual, strict_inc=True):
 
         return np.array(probs)[path], np.array(power)[path], np.array(fdr)[path]
 
+def get_genome_wide_post_prob(model):
+    return get_post_probs(f'{model}/sample_0.probs')
 
-def plot_power_fdr(models_path, casual_info_path, out_path, samples, strict_inc=True, ignore_bad=False, title=''):
+
+def plot_power_fdr(models_path, casual_info_path, out_path, samples, strict_inc=True, ignore_bad=False, title='', genome_wide_models=False):
     
     lines = []
     for model in os.listdir(models_path):
@@ -545,6 +563,14 @@ def plot_power_fdr(models_path, casual_info_path, out_path, samples, strict_inc=
     for (model, fdr, power), color in zip(lines, colors):
         print(model)
         plt.plot(fdr, power, label=model, color=color)
+
+    if genome_wide_models:
+        print(genome_wide_models)
+        for model in os.listdir(genome_wide_models):
+            print(model)
+            _, fdr, power = get_power_fdr_series(get_genome_wide_post_prob(f'{genome_wide_models}/{model}'), 
+                                             casual_info_path)
+            plt.plot(fdr, power,label=model, color=color, linestyle='dashed')
 
     plt.xlabel('FDR')
     plt.ylabel('Power')
@@ -876,7 +902,7 @@ def make_stacked_plots(gwas_path, models_dir, output_path, real_snp_location_bas
     casual_i = get_casual_marker(
         f'{real_snp_location_base}/snp_info_sample_{i}')
 
-    for j, model in enumerate(models):
+    for j, model in enumerate(sorted(models)):
         post_path = f'{models_dir}/{model}/sample_{i}.probs'
         post = get_post_probs(post_path)
         plot_post_probs(axs[j], post, casual_i, title=model)
@@ -936,5 +962,47 @@ def plot_region(center_marker, gwas_p_path, bayes_post_path, output_location, ma
     plt.savefig(output_location)
 
 
-# small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/models/bolt_cheat/sample_3.probs
-# small_chunks/chucks_1_marker_her_0.02_ind50000_casual_1/models/bolt_cheat_casual/sample_3.probs
+
+
+
+
+
+#### combining genomes ###
+
+def combine_phenotypes(phenotypes_path, output_path, samples):
+    """
+    Combines the phenotypes of multiple samples into a single file
+
+    Args:
+    `phenotypes_path` (str):
+        The path to the phenotypes
+    `output_path` (str):
+        The path to the output file
+    `samples` (iterable):
+        The samples to be combined
+    `num_phenotypes` (int, optional):
+        The number of phenotypes to be combined. Defaults to 1.
+
+    Returns: None
+    """
+
+    samples = list(samples)
+
+    # accession ids
+    output_df = pd.read_csv(f'{phenotypes_path}/sample_{samples[0]}', sep = ' ', header=None)[[0, 1]]
+
+
+
+
+    # column 2 is the phenotype
+    pheno_combine = np.zeros(len(output_df))
+    for sample in samples:
+        pheno = np.array(pd.read_csv(f'{phenotypes_path}/sample_{sample}', sep=' ', header=None)[2])
+        # normalise pheno
+        pheno_combine += (pheno - np.mean(pheno))/np.std(pheno)
+
+    pheno_combine /= len(samples)
+
+    output_df[3] = pheno_combine
+
+    output_df.to_csv(output_path, sep=' ', header=None, index=None)
