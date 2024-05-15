@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+for ((i=0; i<20; i++)); do
+    python3 -c "import python_scripts.utils as utils; utils.simulate_traits_for_genome_chunks(bfile='small_chunks_current/genome_binary/sample', phenotypes_output_path='small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_3/phenotypes', snps_info='small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_3/casual_snp_info', heritability=0.75, num_casual=3, sample=$i)"
+done
+python3 -c "import python_scripts.utils as utils; utils.combine_phenotypes('small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_3/phenotypes', 'small_chunks_current/genome_sample_combine/combined_pheno_her_0.75_ind50000_casual_3', range(20))"
+

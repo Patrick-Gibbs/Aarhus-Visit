@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+for ((i=0; i<20; i++)); do
+    ~/dsmwpred/patrick/ldak --calc-cors small_chunks_current/cors/sample_${i} --bfile small_chunks_current/genome_binary/sample_${i} --keep small_chunks_current/rand.5000
+done
+

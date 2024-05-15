@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+python3 -c "import python_scripts.utils as utils; utils.plot_power_fdr('small_chunks_current/chunk_compheno_sims/combined_her_0.1_ind50000_casual_3/models', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.1_ind50000_casual_3/casual_snp_info', 'small_chunks_current/chunk_compheno_sims/power_fdr_he_0.1_casual_3.png', range(20), title='he_0.1_casual_3', genome_wide_models='small_chunks_current/combined_sims/combined_her_0.1_ind50000_casual_3/models')"
+

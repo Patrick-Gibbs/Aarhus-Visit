@@ -1,0 +1,16 @@
+#!/bin/bash
+#SBATCH --mem 8G
+#SBATCH -c 1
+#SBATCH -t 00:20:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+source simulate_chunks_const.sh
+for he in $HE_COMBINE; do
+for casual_markers in $CASUAL_VALUES; do
+source simulate_chunks_loop_const.sh
+mkdir $combine_models
+mkdir $chunked_compheno_models
+mkdir $experiment_name_chunk_compheno/finemap_z_files
+python3 -c "import python_scripts.utils as utils; utils.make_finemap_z_files(dir='$experiment_name_chunk_compheno/finemap_z_files', gwas_base='$gwas_chunked_combine_pheno', binary_base='$genome_sample_binary_path', samples=range($num_simulations))"
+done; done 
+

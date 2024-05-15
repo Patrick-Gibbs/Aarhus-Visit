@@ -1,8 +1,20 @@
 #### Constants #####
-HE_VALUES="0.02"
+
+HE_COMBINE="0.1 0.2 0.5 0.75"
+HE_CHUNKED="0.02 0.05 0.1"
 CASUAL_VALUES="1 3"
 
-num_simulations=10
+HE_VALUES=""
+
+for value in $HE_COMBINE $HE_CHUNKED; do
+    if [[ ! $value =~ (^|[[:space:]])$HE_VALUES($|[[:space:]]) ]]; then
+        HE_VALUES="$HE_VALUES $value"
+    fi
+done
+
+HE_VALUES=${HE_VALUES:1}  # Remove the leading space
+
+num_simulations=20
 random_seed=42
 number_of_indiduals=50000 # max is 392214
 sample_size=2000000

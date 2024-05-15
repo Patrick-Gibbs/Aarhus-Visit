@@ -1,0 +1,25 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+
+for model in $(find small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/models -mindepth 1 -maxdepth 1 -type d); do
+    python3 -c "import python_scripts.utils as utils; utils.get_stats_chunk_1_snp(pvals_file='small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/fine_map_gwas', probs_file='$model', casual_file='small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/casual_snp_info', model='$model',sim_numbers=range(20))"
+done
+
+mkdir small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/stacked_figures
+for ((i=0; i<20; i++)); do
+python3 -c "import python_scripts.utils as utils; utils.make_stacked_plots('small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/fine_map_gwas', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/models', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/stacked_figures', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/casual_snp_info', $i)"
+done
+
+
+python3 -c "import python_scripts.utils as utils; utils.get_json_summary('small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/fine_map_gwas', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/models', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/summary.json', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/casual_snp_info', sim_numbers=range(20))"
+python3 -c "import python_scripts.utils as utils; utils.get_json_summary('small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/fine_map_gwas', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/models', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/summary_ignore_bad.json', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/casual_snp_info', sim_numbers=range(20), ignore_bad=True)"
+
+mkdir small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/summary_plots
+python3 -c "import python_scripts.utils as utils; utils.model_compare_figures('small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/summary.json', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/summary_plots/summary_plots', statistics=None)"
+python3 -c "import python_scripts.utils as utils; utils.model_compare_figures('small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/summary_ignore_bad.json', 'small_chunks_current/chunked_sims/chucks_1_marker_her_0.2_ind50000_casual_1/summary_plots/summary_plots_summary_ignore_bad', statistics=None)"
+
+

@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+for ((i=0; i<20; i++)); do
+/home/patrickgibbs/dsmwpred/patrick/plink/plink --bfile /faststorage/project/dsmwpred/data/ukbb/geno --extract small_chunks_current/genome_sample/sample_${i} --range --make-bed --out small_chunks_current/genome_binary/sample_${i} --keep small_chunks_current/rand50000_included.fam 
+done
+

@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+~/dsmwpred/patrick/ldak --calc-cors small_chunks_current/genome_sample_combine/cors --bfile small_chunks_current/genome_sample_combine/combined_samples --max-threads 4 --keep small_chunks_current/rand.5000
+
+

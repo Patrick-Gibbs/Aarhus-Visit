@@ -1,0 +1,43 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+
+for ((i=0; i<20; i++)); do
+    if [[ "0.02 0.05 0.1" =~ 0.75 ]]; then
+    mkdir small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_3/models/bolt_no_cheat
+    param_path=small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_3/models/bolt_no_cheat/params
+    gwas=small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_3/fine_map_gwas
+    rm ${param_path}_$i
+    touch ${param_path}_$i
+    for he_t in 0.0005 0.001 0.002 0.004 0.008 0.016 0.032 0.064 0.128 0.256; do
+        for ((as_c=1; as_c<=10; as_c++ )); do
+            # make the params file for bolt
+            num_lines=$(wc -l < $gwas/sample_${i}.summaries)
+            casual_prop=$(echo "scale=7; $as_c/$num_lines" | bc)
+            echo "$he_t 0$casual_prop 0" >> ${param_path}_$i
+        done; done
+        ~/dsmwpred/patrick/ldak --mega-prs small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_3/models/bolt_no_cheat/sample_${i} --model bolt --summary small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_3/fine_map_gwas/sample_${i}.summaries --cors small_chunks_current/cors/sample_${i} --power 0.25 --high-LD highld.txt --allow-ambiguous YES --max-threads 4 --parameters ${param_path}_$i  
+    fi
+
+    if [[ "0.1 0.2 0.5 0.75" =~ 0.75 ]]; then
+        mkdir small_chunks_current/chunk_compheno_sims/combined_her_0.75_ind50000_casual_3/models/bolt_no_cheat
+        param_path=small_chunks_current/chunk_compheno_sims/combined_her_0.75_ind50000_casual_3/models/bolt_no_cheat/params
+        gwas=small_chunks_current/chunk_compheno_sims/combined_her_0.75_ind50000_casual_3/fine_map_gwas
+        rm ${param_path}_$i
+        touch ${param_path}_$i
+
+         for he_t in 0.0005 0.001 0.002 0.004 0.008 0.016 0.032 0.064 0.128 0.256; do
+            for ((as_c=1; as_c<=10; as_c++ )); do
+                # make the params file for bolt
+                num_lines=$(wc -l < $gwas/sample_${i}.summaries)
+                casual_prop=$(echo "scale=7; $as_c/$num_lines" | bc)
+                echo "$he_t 0$casual_prop 0" >> ${param_path}_$i
+            done; done
+        ~/dsmwpred/patrick/ldak --mega-prs small_chunks_current/chunk_compheno_sims/combined_her_0.75_ind50000_casual_3/models/bolt_no_cheat/sample_${i} --model bolt --summary small_chunks_current/chunk_compheno_sims/combined_her_0.75_ind50000_casual_3/fine_map_gwas/sample_${i}.summaries --cors small_chunks_current/cors/sample_${i} --power 0.25 --high-LD highld.txt --allow-ambiguous YES --max-threads 4 --parameters ${param_path}_$i   
+    fi
+
+done
+

@@ -1,0 +1,8 @@
+Datafile small_chunks_current/genome_binary/sample_5.bed
+Num_Samples 50000
+Num_Predictors 676
+Num_Samples_Used 5000
+Num_Predictors_Used 676
+Num_Pairs 68950
+Threshold 1.3261e-03
+Window_kb 3000.0000

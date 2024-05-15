@@ -1,0 +1,18 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+for ((i=0; i<20; i++)); do
+if [[ "0.02 0.05 0.1" =~ 0.75 ]]; then
+    ~/dsmwpred/patrick/ldak --linear small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_1/fine_map_gwas/sample_${i} --bfile small_chunks_current/genome_binary/sample_${i} --pheno small_chunks_current/chunked_sims/chucks_1_marker_her_0.75_ind50000_casual_1/phenotypes/sample_${i} --max-threads 4
+fi
+if [[ "0.1 0.2 0.5 0.75" =~ 0.75 ]]; then
+    ~/dsmwpred/patrick/ldak --linear small_chunks_current/chunk_compheno_sims/combined_her_0.75_ind50000_casual_1/fine_map_gwas/sample_${i} --bfile small_chunks_current/genome_binary/sample_${i} --pheno small_chunks_current/genome_sample_combine/combined_pheno_her_0.75_ind50000_casual_1 --max-threads 4
+fi
+done
+if [[ "0.1 0.2 0.5 0.75" =~ 0.75 ]]; then
+~/dsmwpred/patrick/ldak --linear small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/fine_map_gwas/gwas --bfile small_chunks_current/genome_sample_combine/combined_samples --pheno small_chunks_current/genome_sample_combine/combined_pheno_her_0.75_ind50000_casual_1 --max-threads 4
+fi
+

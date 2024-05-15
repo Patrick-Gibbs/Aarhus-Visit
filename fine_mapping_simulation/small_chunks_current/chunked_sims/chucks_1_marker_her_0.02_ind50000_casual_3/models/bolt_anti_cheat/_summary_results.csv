@@ -1,0 +1,14 @@
+Number of times leading p_val is casual [3 0 2]
+Number of times leading post. is casual [2 0 2]
+100.00% true positive discovery rate: 8.33% of variants detected with post. cut of off 0.81
+ 99.00% true positive discovery rate: 8.33% of variants detected with post. cut of off 0.81
+ 95.00% true positive discovery rate: 8.33% of variants detected with post. cut of off 0.81
+ 90.00% true positive discovery rate: 8.33% of variants detected with post. cut of off 0.81
+ 80.00% true positive discovery rate: 8.33% of variants detected with post. cut of off 0.81
+ 70.00% true positive discovery rate: 8.33% of variants detected with post. cut of off 0.64
+treating post = 1.00 as casual: TP   2 FP   0
+treating post > 0.99 as casual: TP   2 FP   0
+treating post > 0.95 as casual: TP   3 FP   0
+treating post > 0.90 as casual: TP   3 FP   0
+treating post > 0.80 as casual: TP   5 FP   1
+treating post > 0.70 as casual: TP   5 FP   1

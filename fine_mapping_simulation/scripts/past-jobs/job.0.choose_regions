@@ -1,0 +1,44 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+source simulate_chunks_const.sh
+mkdir small_chunks_current
+
+mkdir small_chunks_current/genome_binary
+mkdir small_chunks_current/genome_sample
+mkdir small_chunks_current/chunked_sims
+mkdir small_chunks_current/combined_sims
+mkdir small_chunks_current/chunk_compheno_sims
+mkdir small_chunks_current/genome_sample_combine
+mkdir small_chunks_current/snps_cors
+mkdir small_chunks_current/cors
+
+for he in $HE_VALUES; do
+for casual_markers in $CASUAL_VALUES; do
+source simulate_chunks_loop_const.sh
+mkdir $experiment_name
+for path in $phenotype_path $gwas_sum_stats_path $casual_snp_info; do
+    mkdir $path
+done
+done; done
+
+for he in $HE_COMBINE; do
+for casual_markers in $CASUAL_VALUES; do
+source simulate_chunks_loop_const.sh
+mkdir $experiment_name_chunk_compheno
+mkdir $experiment_name_combined
+for path in $gwas_sum_stats_path_combined_pheno  $gwas_chunked_combine_pheno  $gwas_sum_stats_combined_path; do
+    mkdir $path
+done
+done; done
+
+ 
+#### SIMULATE TRAIT ####
+# sample size is the size of each genomic region
+python3 -c "import python_scripts.utils as utils; utils.sample_genome_domains(sample_size=${sample_size}, sample_number=${num_simulations}, genome_path='${ukbb_binary_path}', output_path='${genome_sampled_markers_path}/sample')"
+python3 -c "import python_scripts.utils as utils; utils.random_indivdual_subset(50000,'/faststorage/project/dsmwpred/data/ukbb/geno.fam', '$subset_individuals', seed=42)"
+
+

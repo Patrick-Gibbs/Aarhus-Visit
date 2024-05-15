@@ -1,0 +1,15 @@
+Constructing 10 models using pseudo training summary statistics
+Model	Type	Heritability	lambda	s	p	f2	p1	p2	p3	p4		Num_Predictors_Failed
+1	bolt	0.0500	NA	NA	0.0031	0.0000	NA	NA	NA	NA	0
+3	bolt	0.0500	NA	NA	0.0094	0.0000	NA	NA	NA	NA	0
+2	bolt	0.0500	NA	NA	0.0063	0.0000	NA	NA	NA	NA	0
+6	bolt	0.0500	NA	NA	0.0187	0.0000	NA	NA	NA	NA	0
+7	bolt	0.0500	NA	NA	0.0219	0.0000	NA	NA	NA	NA	0
+4	bolt	0.0500	NA	NA	0.0125	0.0000	NA	NA	NA	NA	0
+9	bolt	0.0500	NA	NA	0.0281	0.0000	NA	NA	NA	NA	0
+5	bolt	0.0500	NA	NA	0.0156	0.0000	NA	NA	NA	NA	0
+10	bolt	0.0500	NA	NA	0.0312	0.0000	NA	NA	NA	NA	0
+8	bolt	0.0500	NA	NA	0.0250	0.0000	NA	NA	NA	NA	0
+Constructing 1 models using summary statistics in small_chunks_current/chunked_sims/chucks_1_marker_her_0.05_ind50000_casual_3/fine_map_gwas/sample_10.summaries
+Model	Type	Heritability	lambda	s	p	f2	p1	p2	p3	p4	Num_Predictors_Failed
+10	bolt	0.0500	NA	NA	0.0312	0.0000	NA	NA	NA	NA	0

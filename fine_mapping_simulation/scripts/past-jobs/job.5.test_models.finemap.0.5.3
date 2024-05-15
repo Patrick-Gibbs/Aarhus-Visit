@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+if [[ "0.02 0.05 0.1" =~ 0.5 ]]; then
+mkdir small_chunks_current/chunked_sims/chucks_1_marker_her_0.5_ind50000_casual_3/models/finemap
+python3 -c "import python_scripts.utils as utils; utils.make_finemap_file(f_name='small_chunks_current/chunked_sims/chucks_1_marker_her_0.5_ind50000_casual_3/finemap_file', z_file_base='small_chunks_current/chunked_sims/chucks_1_marker_her_0.5_ind50000_casual_3/finemap_z_files', cors_base='small_chunks_current/snps_cors', num_samples=50000,  samples=range(20), model_path='small_chunks_current/chunked_sims/chucks_1_marker_her_0.5_ind50000_casual_3/models/finemap')"
+/home/patrickgibbs/dsmwpred/patrick/finemap_v1.4.2_x86_64/finemap_v1.4.2_x86_64 --sss --in-files small_chunks_current/chunked_sims/chucks_1_marker_her_0.5_ind50000_casual_3/finemap_file --n-threads 4
+python3 -c "import python_scripts.utils as utils; utils.make_fine_map_probs('small_chunks_current/chunked_sims/chucks_1_marker_her_0.5_ind50000_casual_3/models/finemap', range(20))"
+fi
+if [[ "0.1 0.2 0.5 0.75" =~ 0.5  ]]; then
+mkdir small_chunks_current/chunk_compheno_sims/combined_her_0.5_ind50000_casual_3/models/finemap
+python3 -c "import python_scripts.utils as utils; utils.make_finemap_file(f_name='small_chunks_current/chunk_compheno_sims/combined_her_0.5_ind50000_casual_3/finemap_file', z_file_base='small_chunks_current/chunk_compheno_sims/combined_her_0.5_ind50000_casual_3/finemap_z_files', cors_base='small_chunks_current/snps_cors', num_samples=50000,  samples=range(20), model_path='small_chunks_current/chunk_compheno_sims/combined_her_0.5_ind50000_casual_3/models/finemap')"
+/home/patrickgibbs/dsmwpred/patrick/finemap_v1.4.2_x86_64/finemap_v1.4.2_x86_64 --sss --in-files small_chunks_current/chunk_compheno_sims/combined_her_0.5_ind50000_casual_3/finemap_file --n-threads 4
+python3 -c "import python_scripts.utils as utils; utils.make_fine_map_probs('small_chunks_current/chunk_compheno_sims/combined_her_0.5_ind50000_casual_3/models/finemap', range(20))"
+fi
+

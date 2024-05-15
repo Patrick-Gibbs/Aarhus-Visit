@@ -1,0 +1,15 @@
+#!/bin/bash
+#SBATCH --mem 8G
+#SBATCH -c 1
+#SBATCH -t 00:20:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+source simulate_chunks_const.sh
+for he in $HE_CHUNKED; do
+for casual_markers in $CASUAL_VALUES; do
+source simulate_chunks_loop_const.sh
+mkdir $models_path
+mkdir $experiment_name/finemap_z_files
+python3 -c "import python_scripts.utils as utils; utils.make_finemap_z_files(dir='$experiment_name/finemap_z_files', gwas_base='$gwas_sum_stats_path', binary_base='$genome_sample_binary_path', samples=range($num_simulations))"
+done; done 
+

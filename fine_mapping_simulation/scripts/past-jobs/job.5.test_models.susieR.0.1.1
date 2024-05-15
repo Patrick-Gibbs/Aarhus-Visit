@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+if [[ "0.02 0.05 0.1" =~ 0.1 ]]; then
+    mkdir small_chunks_current/chunked_sims/chucks_1_marker_her_0.1_ind50000_casual_1/models/susieR
+fi
+if [[ "0.1 0.2 0.5 0.75" =~ 0.1 ]]; then
+    mkdir small_chunks_current/chunk_compheno_sims/combined_her_0.1_ind50000_casual_1/models/susieR
+fi
+
+for ((i=0; i<20; i++)); do
+
+    if [[ "0.02 0.05 0.1" =~ 0.1 ]]; then
+        Rscript python_scripts/run_sussie.R small_chunks_current/chunked_sims/chucks_1_marker_her_0.1_ind50000_casual_1/fine_map_gwas/sample_${i}.summaries small_chunks_current/snps_cors/sample_${i}.ld small_chunks_current/chunked_sims/chucks_1_marker_her_0.1_ind50000_casual_1/models/susieR/sample_${i} 50000
+    fi
+    if [[ "0.1 0.2 0.5 0.75" =~ 0.1 ]]; then
+        Rscript python_scripts/run_sussie.R small_chunks_current/chunk_compheno_sims/combined_her_0.1_ind50000_casual_1/fine_map_gwas/sample_${i}.summaries small_chunks_current/snps_cors/sample_${i}.ld small_chunks_current/chunk_compheno_sims/combined_her_0.1_ind50000_casual_1/models/susieR/sample_${i} 50000
+    fi
+done
+
+

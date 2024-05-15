@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH --mem 8G
+#SBATCH -c 1
+#SBATCH -t 00:20:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+python3 -c "import python_scripts.utils as utils; utils.make_ld_matrix(bfile='small_chunks_current/genome_binary', sample_number=20, output_path='small_chunks_current/snps_cors')"
+

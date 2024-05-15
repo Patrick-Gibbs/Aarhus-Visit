@@ -1,0 +1,21 @@
+,leading_p_is_casual,highest_post_prob_is_casual,num_true_possitive_p5*10**(-8),num_false_possitive_p5*10**(-8),num_true_possitive_post95,num_false_possitive_post95
+0,[False False  True],[False False False],1,12,1,394
+1,[False False  True],[False False False],1,0,1,444
+2,[ True False False],[False False False],1,18,1,215
+3,[ True False False],[False False False],1,7,1,503
+4,[False False  True],[False False False],1,4,1,410
+5,[False False False],[False False False],1,1,1,673
+6,[False  True False],[False False False],1,2,1,925
+7,[ True False False],[False False False],1,0,1,604
+8,[False  True False],[False False False],1,2,1,427
+9,[False False  True],[False False False],1,0,1,784
+10,[ True False False],[False False False],1,3,1,316
+11,[False False  True],[False False False],1,0,1,323
+12,[ True False False],[False False False],1,22,1,304
+13,[False False  True],[False False False],1,18,1,365
+14,[ True False False],[False False False],1,0,1,460
+15,[ True False False],[False False False],1,3,1,493
+16,[False False  True],[False False False],1,16,1,331
+17,[False  True False],[False False False],1,0,1,577
+18,[False False  True],[False False False],1,0,1,421
+19,[ True False False],[False False False],1,0,1,454

@@ -1,0 +1,7 @@
+# Post-Pr(# of causal SNPs is 5) = 1
+#log10bf 291.14 NA 22.5338 NA 15.1281 NA 15.0462 NA 14.9785 NA
+#min(|ld|) 1 NA 1 NA 1 NA 1 NA 1 NA
+#mean(|ld|) 1 NA 1 NA 1 NA 1 NA 1 NA
+#median(|ld|) 1 NA 1 NA 1 NA 1 NA 1 NA
+index cred1 prob1 cred2 prob2 cred3 prob3 cred4 prob4 cred5 prob5
+1 15:35078920_G_T 1 15:35083251_A_G 0.997894 15:35076293_T_C 0.998981 15:34431817_C_T 0.952207 15:35086530_C_T 1

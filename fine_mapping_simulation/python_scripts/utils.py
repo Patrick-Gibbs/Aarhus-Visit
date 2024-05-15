@@ -33,9 +33,9 @@ PROB_COLUMN = 'Probability'
 CASUAL_SIZE = 8
 SIZE = 3
 
-##############################################
+###############################################
 # To help with sampling subsets of the genome #
-##############################################
+###############################################
 
 def make_finemap_file(f_name, z_file_base, cors_base, num_samples, samples, model_path):
     """Makes a file for Finemap to run from
@@ -214,12 +214,16 @@ def sample_genome_domains(sample_size, sample_number, genome_path, output_path, 
 
     # select 200 1mb regions
     previous_bounds = []
+    outputs = []
     for i in tqdm(range(sample_number)):
         previous_bounds.append(sample_snp(
             previous_bounds, ukbb_bim, approx_chromosome_size, size=sample_size))
+        outputs.append((int(previous_bounds[i][CHROMOSOME]), int(previous_bounds[i][START]), int(previous_bounds[i][FINISH]), f'sample_{i+1}'))
+    
+    outputs = sorted(outputs)
+    for i in range(sample_number):
         with open(f'{output_path}_{i}', 'w') as f:
-            f.write(
-                f'{previous_bounds[i][CHROMOSOME]} {previous_bounds[i][START]} {previous_bounds[i][FINISH]} sample_{i+1}')
+            f.write(' '.join(map(str, outputs[i])))
 
 def get_bed(bfile, i):
     ukbb_path = f'{bfile}/sample_{i}.bed'
@@ -470,6 +474,9 @@ def count_tp_fp(all_post_vals, all_casual, post_critical):
     Returns:
         (int, int): The number of true and false positives
     """
+    if len(all_post_vals) == 0:
+        return 0,0 
+
     num_true_discoveries = len(np.intersect1d(
         np.where(all_post_vals >= post_critical)[0], all_casual))
     num_false_discoveries = len(np.intersect1d(np.where(all_post_vals >= post_critical)[
@@ -495,6 +502,8 @@ def restricted_true_discovery_rate(all_post_vals, all_casual, fp_tolerance):
 
     arg_sort = np.argsort(all_post_vals)[::-1]
     all_casual = set(all_casual)
+    if len(all_post_vals) == 0: 
+        return (None, 0) 
     restricted_post_discovery = (None, max(all_post_vals))
     tp, fp = 0, 0
     for index in arg_sort[:int(len(all_casual)/fp_tolerance)+1]:
@@ -508,6 +517,18 @@ def restricted_true_discovery_rate(all_post_vals, all_casual, fp_tolerance):
     return restricted_post_discovery
 
 def get_power_fdr_series(all_post_vals, all_casual, strict_inc=True):
+    """ Used for generation of the fdr-power plots. Gets a series of values for the plot,
+    i.e. the one line on the plot. Finds the highest possible power for each FDR value.
+
+    Args:
+        all_post_vals (np.array): The post. probabilities
+        all_casual (np.array): _description_
+        strict_inc (bool, optional): _description_. Defaults to True.
+
+    Returns:
+        _type_: _description_
+    """
+
     arg_sort = np.argsort(all_post_vals)[::-1]
     tolerance = 1e-6 # Set your tolerance value
     disjoint_indices = np.where(~np.isclose(np.diff(all_post_vals[arg_sort]), 0, atol=tolerance))[0]
@@ -552,25 +573,44 @@ def plot_power_fdr(models_path, casual_info_path, out_path, samples, strict_inc=
     lines = []
     for model in os.listdir(models_path):
         all_post_vals, all_casual, _ = combine_genome_sample_r(None, f'{models_path}/{model}', casual_info_path, samples, ignore_bad=ignore_bad)
+        print(model)
+        print(all_post_vals[all_casual])
         _, power, fdr = get_power_fdr_series(all_post_vals, all_casual, strict_inc=strict_inc)
         fdr = [fdr[i] for i in np.repeat(np.arange(len(fdr)), 2)][1:]
         power = [power[i] for i in np.repeat(np.arange(len(power)), 2)][:len(power)*2-1]
         lines.append((model, fdr, power))
+        
+        #ax = plt.gca()
+        #plot_post_probs(ax, all_post_vals, all_casual)
+        #plt.savefig(f'chunked_{model}.png')
+        #plt.clf()
 
     # plot each line in a different color and use model as the legand
     lines = sorted(lines)
     colors = list(mcolors.TABLEAU_COLORS) + list(sns.color_palette('dark'))
     for (model, fdr, power), color in zip(lines, colors):
-        print(model)
         plt.plot(fdr, power, label=model, color=color)
 
     if genome_wide_models:
         print(genome_wide_models)
-        for model in os.listdir(genome_wide_models):
+        for model, color in zip(os.listdir(genome_wide_models), list(colors)[::-1]):
             print(model)
-            _, fdr, power = get_power_fdr_series(get_genome_wide_post_prob(f'{genome_wide_models}/{model}'), 
-                                             casual_info_path)
+            post = (get_genome_wide_post_prob(f'{genome_wide_models}/{model}'))
+            print(len(post))
+            print(len(all_casual))
+            print(statistics.median(post))
+            print(post[all_casual])
+            _, power, fdr  = get_power_fdr_series(get_genome_wide_post_prob(f'{genome_wide_models}/{model}'), 
+                                             all_casual, strict_inc=strict_inc)
+            
+            fdr = [fdr[i] for i in np.repeat(np.arange(len(fdr)), 2)][1:]
+            power = [power[i] for i in np.repeat(np.arange(len(power)), 2)][:len(power)*2-1]
             plt.plot(fdr, power,label=model, color=color, linestyle='dashed')
+
+            #ax = plt.gca()
+            #plot_post_probs(ax, all_post_vals, all_casual)
+            #plt.savefig(f'genome_wide_{model}.png')
+            #plt.clf()
 
     plt.xlabel('FDR')
     plt.ylabel('Power')
@@ -662,6 +702,12 @@ def get_stats_chunk_1_snp(pvals_file, probs_file, casual_file, model, sim_number
     # get 95% discovery rate
     all_post_vals, all_casual, all_p_vals = combine_genome_sample_r(pvals_file, probs_file,
                                                                     casual_file, sim_numbers, ignore_bad=ignore_bad)
+
+    if len(all_post_vals) == 0:
+        with open(f'{model}/_summary_results{ignore_bad_suffix}.csv', 'w') as f:
+            f.write("all post values were 0")
+        return
+
 
     post_discoverys = [restricted_true_discovery_rate(
         all_post_vals, all_casual, post_start) for post_start in critical_post_values]

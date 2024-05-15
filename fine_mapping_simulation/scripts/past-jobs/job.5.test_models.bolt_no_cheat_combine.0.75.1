@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+mkdir small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/models
+mkdir small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/models/bolt_no_cheat
+rm small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/models/bolt_no_cheat/params
+touch small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/models/bolt_no_cheat/params
+for he_t in 0.0005 0.001 0.002 0.004 0.008 0.016 0.032 0.064 0.128 0.256; do
+for casual_prop in 0.0001 0.0005 0.001 0.002 0.004 0.008 0.016 0.032 0.064 0.128 0.256; do
+    # make the params file for bolt
+    echo $he_t $casual_prop 0 >> small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/models/bolt_no_cheat/params
+done; done
+~/dsmwpred/patrick/ldak --mega-prs small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/models/bolt_no_cheat/sample_0 --model bolt --summary small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/fine_map_gwas/gwas.summaries --cors small_chunks_current/genome_sample_combine/cors --power 0.25 --high-LD highld.txt --allow-ambiguous YES --max-threads 4 --parameters  small_chunks_current/combined_sims/combined_her_0.75_ind50000_casual_1/models/bolt_no_cheat/params
+

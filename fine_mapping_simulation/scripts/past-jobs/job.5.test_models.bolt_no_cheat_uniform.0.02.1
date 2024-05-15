@@ -1,0 +1,20 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+mkdir small_chunks_current/chunked_sims/chucks_1_marker_her_0.02_ind50000_casual_1/models/bolt_no_cheat_uniform
+rm small_chunks_current/chunked_sims/chucks_1_marker_her_0.02_ind50000_casual_1/models/bolt_no_cheat_uniform/params_$i
+touch rm small_chunks_current/chunked_sims/chucks_1_marker_her_0.02_ind50000_casual_1/models/bolt_no_cheat_uniform/params_$i
+for ((i=0; i<20; i++)); do
+    for he_t in 0.0005 0.001 0.002 0.004 0.008 0.016 0.032 0.064 0.128 0.256; do
+    for ((as_c=1; as_c<=10; as_c++ )); do
+        # make the params file for bolt
+        num_lines=$(wc -l < small_chunks_current/chunked_sims/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas/sample_${i}.summaries)
+        casual_prop=$(echo "scale=7; $as_c/$num_lines" | bc)
+        echo "$he_t 0$casual_prop 0" >> small_chunks_current/chunked_sims/chucks_1_marker_her_0.02_ind50000_casual_1/models/bolt_no_cheat_uniform/params_$i
+    done; done
+    ~/dsmwpred/patrick/ldak --mega-prs small_chunks_current/chunked_sims/chucks_1_marker_her_0.02_ind50000_casual_1/models/bolt_no_cheat_uniform/sample_${i} --model bolt --summary small_chunks_current/chunked_sims/chucks_1_marker_her_0.02_ind50000_casual_1/fine_map_gwas/sample_${i}.summaries --cors small_chunks_current/cors/sample_${i} --power 0 --high-LD highld.txt --allow-ambiguous YES --max-threads 4 --parameters small_chunks_current/chunked_sims/chucks_1_marker_her_0.02_ind50000_casual_1/models/bolt_no_cheat_uniform/params_$i   
+done
+

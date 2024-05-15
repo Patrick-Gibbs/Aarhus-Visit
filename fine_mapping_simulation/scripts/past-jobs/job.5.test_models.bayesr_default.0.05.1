@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH --mem 32G
+#SBATCH -c 4
+#SBATCH -t 00:15:00
+source /home/patrickgibbs/.bashrc
+conda activate myenv1
+mkdir small_chunks_current/chunked_sims/chucks_1_marker_her_0.05_ind50000_casual_1/models/bayesr_default
+for ((i=0; i<20; i++)); do
+    ~/dsmwpred/patrick/ldak --mega-prs small_chunks_current/chunked_sims/chucks_1_marker_her_0.05_ind50000_casual_1/models/bayesr_default/sample_${i} --model bayesr --summary small_chunks_current/chunked_sims/chucks_1_marker_her_0.05_ind50000_casual_1/fine_map_gwas/sample_${i}.summaries --cors small_chunks_current/cors/sample_${i} --power 0.25 --high-LD highld.txt --allow-ambiguous YES --max-threads 4
+done
+

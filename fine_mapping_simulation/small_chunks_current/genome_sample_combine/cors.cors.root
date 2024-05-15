@@ -1,0 +1,8 @@
+Datafile small_chunks_current/genome_sample_combine/combined_samples.bed
+Num_Samples 50000
+Num_Predictors 9483
+Num_Samples_Used 5000
+Num_Predictors_Used 9483
+Num_Pairs 1186752
+Threshold 1.3261e-03
+Window_kb 3000.0000
